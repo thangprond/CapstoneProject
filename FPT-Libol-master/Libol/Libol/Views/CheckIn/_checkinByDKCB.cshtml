@@ -81,20 +81,6 @@
                     <div class="form-row">
                         <div class="col"><label class="col-form-label">Nhóm: <strong>@ViewBag.PatronDetail.intPatronGroupID</strong></label></div>
                     </div>
-                    <div class="form-row">
-                        <div class="col">
-                            <label class="col-form-label">
-                                Tình trạng: @if (ViewBag.active == 1)
-                                {
-                                    <strong>Thẻ mở</strong>
-                                }
-                                else
-                                {
-                                    <strong style="color:red;">Thẻ khóa</strong> <a href="#" style="margin-left: 15px;" onclick="ShowPatronLock()">Chi tiết</a>
-                                }
-                            </label>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
