@@ -42,8 +42,9 @@
                     { "data": "Note" },
                     {
                         "render": function (data, type, full, meta) {
+                            var title = full.Title.replace("'", "");
                             return '<button class="btn btn-info" type="button"  onclick="ShowUpdateForm(' +
-                                "'aaaa'," +
+                                "'" + title + "'," +
                                 "'" + full.Copynumber + "'," +
                                 "'" + full.CheckoutDate + "'," +
                                 "'" + full.DueDate + "'," +
@@ -90,7 +91,11 @@
             document.getElementById("txtTitle").value = Title;
             document.getElementById("txtCopyNumber").value = Copynumber;
             document.getElementById("txtCheckOutDate").value = CheckOutDate;
-            document.getElementById("txtDueDate").value = DueDate;
+
+            var arr = DueDate.split("/");
+            var date = arr[2]+"-" + arr[1]+"-" + arr[0];
+
+            document.getElementById("txtDueDate").value = date;
             document.getElementById("txtNote").value = Note;
 
             $("#myModal1").modal("show");
@@ -401,7 +406,7 @@
             <div class="modal-body">
                 <div class="form-group ">
                     <label for="txtFullName">Nhan đề:</label>
-                    <input type="text" class="form-control" id="txtTitle" disabled>
+                    <textarea class="form-control" id="txtTitle" disabled/>
                 </div>
                 <div class="form-group ">
                     <label for="txtPatronCode">ĐKCB:</label>
@@ -413,7 +418,7 @@
                 </div>
                 <div class="form-group ">
                     <label for="txtFinishdate">Hạn trả:</label>
-                    <input type="text" class="form-control" id="txtDueDate" disabled>
+                    <input type="date" class="form-control" id="txtDueDate" >
                 </div>
                 <div class="form-group ">
                     <label for="txtLockedDay">Ghi chú:</label>
