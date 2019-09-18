@@ -459,7 +459,7 @@ namespace Libol.Controllers
             //Search    
             if (!string.IsNullOrEmpty(searchValue))
             {
-                holdings = holdings.Where(m => m.CopyNumber.ToLower().Contains(searchValue.ToLower())).ToList();
+                holdings = holdings.Where(m => m.CopyNumber.ToLower().Contains(searchValue.Trim().ToLower())).ToList();
             }
 
             //total number of rows count     
