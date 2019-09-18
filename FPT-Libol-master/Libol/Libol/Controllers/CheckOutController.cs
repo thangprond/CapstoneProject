@@ -164,7 +164,7 @@ namespace Libol.Controllers
         public PartialViewResult ChangeNote(string strCopyNumber, string strNote, string strDueDate)
         {
             int lngTransactionID = db.CIR_LOAN.Where(a => a.CopyNumber == strCopyNumber).First().ID;
-            db.SP_UPDATE_CURRENT_LOAN(lngTransactionID, strNote, "");
+            db.SP_UPDATE_CURRENT_LOAN(lngTransactionID, strNote, strDueDate);
             Getcurrentloandetail();
             Getpatrondetail(patroncode);
             return PartialView("_checkoutSuccess");
