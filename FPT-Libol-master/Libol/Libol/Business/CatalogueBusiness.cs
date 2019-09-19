@@ -43,7 +43,7 @@ namespace Libol.Models
             return list;
         }
 
-        public List<int> SearchIDByCondition(string strCode, string strCN, string strTT , string ISBN )
+        public List<int> SearchIDByCondition(string strCode, string strCN, string strTT, string ISBN)
         {
             List<int> ItemIds = new List<int>();
 
@@ -78,7 +78,7 @@ namespace Libol.Models
         //Seach Code for Update Catalogue
         public List<FPT_SP_CATA_GET_DETAILINFOR_OF_ITEM_Result> SearchCode(string strCode, string strCN, string strTT)
         {
-            List<int> ItemId = SearchIDByCondition(strCode, strCN, strTT , "");
+            List<int> ItemId = SearchIDByCondition(strCode, strCN, strTT, "");
 
             //get List Infor detail
             List<FPT_SP_CATA_GET_DETAILINFOR_OF_ITEM_Result> inforList = new List<FPT_SP_CATA_GET_DETAILINFOR_OF_ITEM_Result>();
@@ -86,13 +86,13 @@ namespace Libol.Models
             {
                 //inforList = inforList.Concat(db.FPT_SP_CATA_GET_DETAILINFOR_OF_ITEM(item.ToString(), 0).ToList()).ToList();
                 List<FPT_SP_CATA_GET_DETAILINFOR_OF_ITEM_Result> inforListTemp = db.FPT_SP_CATA_GET_DETAILINFOR_OF_ITEM(item.ToString(), 0).ToList();
-                for(int i = 0; i < inforListTemp.Count; i++)
+                for (int i = 0; i < inforListTemp.Count; i++)
                 {
-                    if(inforListTemp[i].FieldCode == "001")
+                    if (inforListTemp[i].FieldCode == "001")
                     {
                         inforList.Add(inforListTemp[i]);
                     }
-                    if(inforListTemp[i].FieldCode == "245")
+                    if (inforListTemp[i].FieldCode == "245")
                     {
                         inforListTemp[i].Content = new FormatHoldingTitle().OnFormatHoldingTitle(inforListTemp[i].Content);
                         inforList.Add(inforListTemp[i]);
@@ -103,7 +103,7 @@ namespace Libol.Models
             return inforList;
         }
 
-        
+
 
         public List<FPT_SP_CATA_GET_CONTENTS_OF_ITEMS_Result> GetContentByID(string Id)
         {
@@ -1047,7 +1047,7 @@ namespace Libol.Models
             List<Nullable<int>> listCode = db.FPT_SELECTALLDELETEABLE().ToList();
             string arrayID = String.Join(",", listCode.ToArray());
             List<SP_GET_TITLES_Result> FinalList = new ShelfBusiness().FPT_SP_GET_TITLES(arrayID);
-            foreach(SP_GET_TITLES_Result item in FinalList)
+            foreach (SP_GET_TITLES_Result item in FinalList)
             {
                 item.Title = new SupportClass.FormatHoldingTitle().OnFormatHoldingTitle(item.Title);
             }
@@ -1056,6 +1056,7 @@ namespace Libol.Models
 
         public List<SP_GET_TITLES_Result> SearchCodeDeleteable(string strCode, string strTT, string strISBN)
         {
+            List<SP_GET_TITLES_Result> finalList = null;
             if (strCode == "" && strTT == "" && strISBN == "")
             {
                 return SearchAllDeleteable();
@@ -1070,26 +1071,48 @@ namespace Libol.Models
 
                 List<int> listTemp = ItemId.Except(listID).ToList();
                 List<int> FinalList = ItemId.Except(listTemp).ToList();
-                string finalStrID = String.Join(",", FinalList.ToArray());
+                if (FinalList.Count != 0)
+                {
+                    string finalStrID = String.Join(",", FinalList.ToArray());
+                    finalList = new ShelfBusiness().FPT_SP_GET_TITLES(finalStrID);
+                    foreach (SP_GET_TITLES_Result item in finalList)
+                    {
+                        item.Title = new SupportClass.FormatHoldingTitle().OnFormatHoldingTitle(item.Title);
+                    }
+                    return finalList;
+                }
+                else
+                {
+                    return finalList;
+                }
 
-                List<SP_GET_TITLES_Result> finalList = new ShelfBusiness().FPT_SP_GET_TITLES(finalStrID); ;
-                return finalList;
             }
 
         }
 
-        public string DeleteCatalogue(string ItemCode)
+        public string DeleteCatalogue(List<string> ItemCodes)
         {
+            List<int> ItemIDs = new List<int>();
+            int rs = 0;
             //Get ItemID by ItemCode
-            int ItemID = db.ITEMs.Where(code => code.Code == ItemCode).Select(i => i.ID).FirstOrDefault();
-            int rs = db.SP_CATA_DELETE_ITEMS(0, ItemID.ToString());
+            foreach (string itemCode in ItemCodes)
+            {
+                int ItemID = db.ITEMs.Where(code => code.Code == itemCode).Select(i => i.ID).FirstOrDefault();
+                ItemIDs.Add(ItemID);
+            }
+            //string x = "'" + String.Join("','", ItemIDs) + "'";
+            foreach (int i in ItemIDs)
+            {
+                rs = db.SP_CATA_DELETE_ITEMS(0, i.ToString());
+            }
+
             if (rs > 0)
             {
-                return "Xóa thành công mã tài liệu : " + ItemCode;
+                return "Xóa thành công " + ItemCodes.Count + " mã tài liệu";
             }
             else
             {
-                return "Xảy ra lỗi !Xóa mã tài liệu không thành công : " + ItemCode;
+                return "Xảy ra lỗi !Xóa mã tài liệu không thành công ";
             }
         }
 
