@@ -949,7 +949,7 @@ namespace Libol.Controllers
             {
                 foreach (var item in patroncodeList)
                 {
-                    cb.FPT_SP_UNLOCK_PATRON_CARD_LIST("'" + item + "'"); ;
+                    cb.FPT_SP_UNLOCK_PATRON_CARD_LIST("'" + item + "'"); 
                 }
             }
             catch (Exception)

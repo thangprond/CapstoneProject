@@ -170,7 +170,30 @@ namespace Libol.Controllers
             return PartialView("_checkoutSuccess");
         }
 
-        [HttpPost]
+		public PartialViewResult OpenPatronCode (string patroncode)
+		{
+			FPT_SP_UNLOCK_PATRON_CARD_LIST("'" + patroncode + "'");
+			if (db.CIR_PATRON_LOCK.Where(a => a.PatronCode == patroncode).Count() == 0)
+			{
+				ViewBag.active = 1;
+			}
+			else
+			{
+				ViewBag.active = 0;
+			}
+			Getcurrentloandetail();
+			Getpatrondetail(patroncode);
+			return PartialView("_showPatronInfo");
+		}
+
+		public List<SP_UNLOCK_PATRON_CARD_Result> FPT_SP_UNLOCK_PATRON_CARD_LIST(string PatronCode)
+		{
+			List<SP_UNLOCK_PATRON_CARD_Result> list = db.Database.SqlQuery<SP_UNLOCK_PATRON_CARD_Result>("SP_UNLOCK_PATRON_CARD {0}",
+				new object[] { PatronCode }).ToList();
+			return list;
+		}
+
+		[HttpPost]
         public PartialViewResult FindByName(string strFullName)
         {
             if (String.IsNullOrEmpty(strFullName))
