@@ -71,6 +71,27 @@ namespace Libol.Models
                 new object[] { LibID, LocID, strShelf, intMode }).ToList();
             return list;
         }
+        //Open Location
+        public List<SP_HOLDING_LIBRARY_SELECT_Result> SP_HOLDING_LIBRARY_SELECT_LIST(int LibID, int LocalLib, int status, int userID, int type)
+        {
+            List<SP_HOLDING_LIBRARY_SELECT_Result> list = db.Database.SqlQuery<SP_HOLDING_LIBRARY_SELECT_Result>("SP_HOLDING_LIBRARY_SELECT {0}, {1}, {2}, {3}, {4}",
+                new object[] { LibID, LocalLib, status, userID, type }).ToList();
+            return list;
+        }
 
+        //get Location inventory
+        public List<SP_HOLDING_LOCATION_GET_INFO_Result> SP_HOLDING_LOCATION_GET_INFO_LIST(int LibID, int userID, int LocID, int status)
+        {
+            List<SP_HOLDING_LOCATION_GET_INFO_Result> list = db.Database.SqlQuery<SP_HOLDING_LOCATION_GET_INFO_Result>("SP_HOLDING_LOCATION_GET_INFO {0}, {1}, {2}, {3}",
+                new object[] { LibID, userID, LocID, status }).ToList();
+            return list;
+        }
+        //close Location
+        public List<SP_HOLDING_LOCATION_UPD_STATUS_Result> SP_HOLDING_LOCATION_UPD_STATUS(string strLocID, string strShelf, int intStatus)
+        {
+            List<SP_HOLDING_LOCATION_UPD_STATUS_Result> list = db.Database.SqlQuery<SP_HOLDING_LOCATION_UPD_STATUS_Result>("SP_HOLDING_LOCATION_UPD_STATUS {0}, {1}, {2}",
+                new object[] { strLocID, strShelf, intStatus }).ToList();
+            return list;
+        }
     }
 }

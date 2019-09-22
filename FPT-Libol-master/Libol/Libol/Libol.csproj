@@ -237,6 +237,7 @@
     <Compile Include="EntityResult\SP_CIR_OVERDUELIST_GETINFOR_Result.cs" />
     <Compile Include="EntityResult\SP_GET_CURRENT_CHECKIN_INFOR_Result.cs" />
     <Compile Include="EntityResult\SP_GET_TITLES_Result.cs" />
+    <Compile Include="EntityResult\SP_HOLDING_LOCATION_UPD_STATUS_Result.cs" />
     <Compile Include="EntityResult\Total_Amount.cs" />
     <Compile Include="Models\FPT_ACQ_STATISTIC_TOP20_BY_THESIS_SUBJECT_Result.cs">
       <DependentUpon>Libol.tt</DependentUpon>
@@ -2594,6 +2595,12 @@
     <Content Include="Views\Circulation\StatisticTop20.cshtml" />
     <Content Include="Views\AcquireReport\SpecializedReport.cshtml" />
     <Content Include="Views\AcquireReport\GetSpecializedReport.cshtml" />
+    <Content Include="Views\Acquisition\OpenLoc.cshtml" />
+    <Content Include="Views\Acquisition\CloseLoc.cshtml" />
+    <Content Include="Views\Acquisition\CreateInventory.cshtml" />
+    <Content Include="Views\Acquisition\CloseInventory.cshtml" />
+    <Content Include="Views\Acquisition\InventoryReport.cshtml" />
+    <Content Include="Views\Acquisition\GetInventoryReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Patron\SearchPatronFilter.cshtml" />

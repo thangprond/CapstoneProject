@@ -7277,3 +7277,60 @@ BEGIN
 
 END
 
+
+
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_SP_ACQ_NEW_INVENTORY]    Script Date: 09/22/2019 20:43:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+Create PROCEDURE [dbo].[FPT_SP_ACQ_NEW_INVENTORY]
+(
+-- Purpose: New inventory
+-- History modify
+-- Person     Date      Comment    
+-- DUCNV     150919    Create
+---------------  ------    ---------------------------------------------------    
+	@strInventoryName	NVARCHAR(200),
+	@strInventoryDate	VARCHAR(30),    
+	@strInputer 		NVARCHAR(100)
+)
+AS    
+	  -- Declare variables
+	DECLARE @intNextID INT
+
+		BEGIN
+			-- Get NextID    
+			SELECT @intNextID = ISNULL(MAX(ID), 0) + 1 FROM INVENTORY    
+			-- Execute
+			INSERT INTO INVENTORY (ID, Name, OpenedDate, DoneBy, Status) VALUES (@intNextID, @strInventoryName, @strInventoryDate, @strInputer, 0)
+		END
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_SP_ACQ_GETMAXID_HINT]    Script Date: 09/22/2019 20:43:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+ALTER PROCEDURE [dbo].[FPT_SP_ACQ_GETMAXID_HINT]  
+-- Purpose: Get max inventorytime   
+-- MODIFICATION HISTORY  
+-- Person      Date    Comments  
+-- ducnv      180919  Create  
+-- ---------   ------  -------------------------------------------   
+AS  
+   SELECT ISNULL(MAX(InventoryTime),0)  FROM HOLDING_INVENTORY   
+
