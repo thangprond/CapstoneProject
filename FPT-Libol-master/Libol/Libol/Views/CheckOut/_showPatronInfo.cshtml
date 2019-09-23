@@ -88,6 +88,25 @@
 
             });
         }
+
+        function OpenPatronCode() {
+            $("#myModal3").modal("hide");
+            var empObj = {
+                patroncode: document.getElementById("plockcode").value,
+            };
+            $.ajax({
+                url: "/CheckOut/OpenPatronCode",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                success: function (result) {
+                    $("#contentcheckout").html(result);
+                },
+                error: function () {
+                }
+
+            });
+        }
     </script>
 </head>
 @if (ViewBag.PatronDetail != null)
@@ -124,7 +143,7 @@
                         <div class="col"><label class="col-form-label">Ngày hết hạn thẻ: <strong>@ViewBag.PatronDetail.strExpiredDate</strong></label></div>
                     </div>
                     <div class="form-row">
-                        <div class="col"><label class="col-form-label">Nhóm: <strong>Sinh viên FU Hà Nội</strong></label></div>
+                        <div class="col"><label class="col-form-label">Nhóm: <strong>@ViewBag.PatronDetail.intPatronGroupID</strong></label></div>
                     </div>
                 </div>
             </div>
@@ -389,7 +408,8 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success " onclick="SaveEditLock()">Sửa</button>
+                    <button type="button" class="btn btn-success" onclick="OpenPatronCode()">Mở thẻ</button>
+                    <button type="button" class="btn btn-primary" onclick="SaveEditLock()">Sửa</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Thoát</button>
                 </div>
 

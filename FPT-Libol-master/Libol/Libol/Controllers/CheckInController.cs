@@ -54,7 +54,7 @@ namespace Libol.Controllers
         )
         {
             string CopyNumber = strCopyNumbers.Trim();
-            int success = -1;
+			int success = -1;
             if (!sessionpcode.Equals(""))
             {
                 Getpatrondetail(sessionpcode);
@@ -101,7 +101,8 @@ namespace Libol.Controllers
                 }
                 Getpatrondetail(patroncode);
             }
-            return PartialView("_checkinByDKCB");
+			
+			return PartialView("_checkinByDKCB");
         }
 
         [HttpPost]
@@ -183,6 +184,7 @@ namespace Libol.Controllers
             string LblackNote = db.CIR_PATRON_LOCK.Where(a => a.PatronCode == LPatronCode).First().Note;
             string[] PatronLockInfo = { LPatronName , LPatronCode , Lblackstartdate, Lblackenddate, LlockedDay , LblackNote };
             return Json(PatronLockInfo, JsonRequestBehavior.AllowGet);
+
         }
 
 
@@ -248,7 +250,30 @@ namespace Libol.Controllers
             }
             ViewBag.patronloaninfo = onLoans;
         }
-    }
+		// open card
+		
+		public PartialViewResult OpenPatronCodeCheckIn(string patroncode)
+		{
+			FPT_SP_UNLOCK_PATRON_CARD_LIST("'" + patroncode + "'");
+			if (db.CIR_PATRON_LOCK.Where(a => a.PatronCode == patroncode).Count() == 0)
+			{
+				ViewBag.active = 1;
+			}
+			else
+			{
+				ViewBag.active = 0;
+			}
+			Getpatrondetail(patroncode);
+			return PartialView("_checkinByCardNumber");
+		}
+
+		public List<SP_UNLOCK_PATRON_CARD_Result> FPT_SP_UNLOCK_PATRON_CARD_LIST(string PatronCode)
+		{
+			List<SP_UNLOCK_PATRON_CARD_Result> list = db.Database.SqlQuery<SP_UNLOCK_PATRON_CARD_Result>("SP_UNLOCK_PATRON_CARD {0}",
+				new object[] { PatronCode }).ToList();
+			return list;
+		}
+	}
     public class OnLoan
     {
         public string Title { get; set; }

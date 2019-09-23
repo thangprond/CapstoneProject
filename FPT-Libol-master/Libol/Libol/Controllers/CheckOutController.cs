@@ -164,13 +164,36 @@ namespace Libol.Controllers
         public PartialViewResult ChangeNote(string strCopyNumber, string strNote, string strDueDate)
         {
             int lngTransactionID = db.CIR_LOAN.Where(a => a.CopyNumber == strCopyNumber).First().ID;
-            db.SP_UPDATE_CURRENT_LOAN(lngTransactionID, strNote, "");
+            db.SP_UPDATE_CURRENT_LOAN(lngTransactionID, strNote, strDueDate);
             Getcurrentloandetail();
             Getpatrondetail(patroncode);
             return PartialView("_checkoutSuccess");
         }
 
-        [HttpPost]
+		public PartialViewResult OpenPatronCode (string patroncode)
+		{
+			FPT_SP_UNLOCK_PATRON_CARD_LIST("'" + patroncode + "'");
+			if (db.CIR_PATRON_LOCK.Where(a => a.PatronCode == patroncode).Count() == 0)
+			{
+				ViewBag.active = 1;
+			}
+			else
+			{
+				ViewBag.active = 0;
+			}
+			Getcurrentloandetail();
+			Getpatrondetail(patroncode);
+			return PartialView("_showPatronInfo");
+		}
+
+		public List<SP_UNLOCK_PATRON_CARD_Result> FPT_SP_UNLOCK_PATRON_CARD_LIST(string PatronCode)
+		{
+			List<SP_UNLOCK_PATRON_CARD_Result> list = db.Database.SqlQuery<SP_UNLOCK_PATRON_CARD_Result>("SP_UNLOCK_PATRON_CARD {0}",
+				new object[] { PatronCode }).ToList();
+			return list;
+		}
+
+		[HttpPost]
         public PartialViewResult FindByName(string strFullName)
         {
             if (String.IsNullOrEmpty(strFullName))

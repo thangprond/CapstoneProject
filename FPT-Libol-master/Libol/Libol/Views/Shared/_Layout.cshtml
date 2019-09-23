@@ -182,12 +182,12 @@
                                 <a class="dropdown-item" href="/CheckIn">Ghi trả</a>
                                 <a class="dropdown-item" href="/Renew/Renew">Gia hạn</a>
                                 <a class="dropdown-item" href="/OverdueList/OverdueList">Quá hạn</a>
-                                <a class="dropdown-item" href="/Circulation/LockPatronStats">Chính sách</a>
+                                <a class="dropdown-item" href="/Circulation/LockPatronStats">Khóa thẻ</a>
                                 <div class="dropdown-item dropright">
                                     <a class="dropdown-toggle">Báo cáo </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" onclick="GoTo('/Circulation/ReportLoanCopy')">Báo cáo từng mượn</a>
-                                        <a class="dropdown-item"  onclick="GoTo('/Circulation/ReportOnLoanCopy')">Báo cáo đang mượn</a>
+                                        <a class="dropdown-item" onclick="GoTo('/Circulation/ReportLoanCopy')">Báo cáo Từng mượn</a>
+                                        <a class="dropdown-item" onclick="GoTo('/Circulation/ReportOnLoanCopy')">Báo cáo Đang mượn</a>
                                     </div>
                                 </div>
                                 <div class="dropdown-item dropright">
@@ -214,6 +214,7 @@
                                         <a class="dropdown-item" onclick="GoTo('/AcquireReport/Index')">Báo cáo bổ sung</a>
                                         <a class="dropdown-item" onclick="GoTo('/AcquireReport/RecomendReport')">Báo cáo đề nghị</a>
                                         <a class="dropdown-item" onclick="GoTo('/AcquireReport/LiquidationStats')">Báo cáo ĐKCB bị hủy</a>
+                                        <a class="dropdown-item" onclick="GoTo('/AcquireReport/SpecializedReport')">Báo cáo Chuyên ngành</a>
                                     </div>
                                 </div>
                                 <div class="dropdown-item dropright">
@@ -233,6 +234,11 @@
                                         <a class="dropdown-item" onclick="GoTo('/Acquired/InRepository')">Xếp giá trong kho</a>
                                         <a class="dropdown-item" onclick="GoTo('/Acquired/LiquidationOrLost')">Xếp giá thanh lý hoặc mất</a>
                                         <a class="dropdown-item" onclick="GoTo('/Acquired/NotYetChecked')">Xếp giá chưa kiểm nhận</a>
+                                        <a class="dropdown-item" href="/Acquisition/InventoryReport">Kiểm kê</a>
+                                        <a class="dropdown-item" href="/Acquisition/CloseLoc">Đóng kho</a>
+                                        <a class="dropdown-item" href="/Acquisition/CreateInventory">Tạo kỳ kiểm kê</a>
+                                        <a class="dropdown-item" href="/Acquisition/OpenLoc">Mở kho</a>
+                                        <a class="dropdown-item" href="/Acquisition/CloseInventory">Đóng kiểm kê</a>
                                     </div>
                                 </div>
                                 <a class="dropdown-item" href="/PrintBarcode">In mã vạch</a>

@@ -6519,7 +6519,7 @@ CREATE  PROCEDURE [dbo].[FPT_SP_GETINFOR_EMAIL]
 	@intTime INT
 AS
 	DECLARE @strSQL VARCHAR(4000)
-	SET @strSQL='(SELECT L.ID AS LOANID, L.LocationID, CONVERT(VARCHAR,L.CheckOutDate,103) AS CheckOutDate,CONVERT(VARCHAR,L.DueDate,103) AS CheckInDate, F.Content AS MainTitle, L.CopyNumber, P.ID AS PatronID, P.FirstName + ''' + '  ' + ''' + P.MiddleName + ''' + '  ' + ''' + P.LastName AS Name,P.Email,'
+	SET @strSQL='(SELECT L.ID AS LOANID, L.LocationID, CONVERT(VARCHAR,L.CheckOutDate,103) AS CheckOutDate,CONVERT(VARCHAR,L.DueDate,103) AS CheckInDate, F.Content AS MainTitle, L.CopyNumber, P.ID AS PatronID, (IsNull(P.FirstName,'''') + '' '' + IsNull(P.MiddleName +'' '' ,'''')  + IsNull(P.LastName,'''')) AS Name,P.Email,'
     +'OverdueDate=floor(DATEDIFF(DAY,L.DueDate,GETDATE())) - (datepart(week,getdate())+53*(datepart(year,getdate())-datepart(year,L.DueDate))-datepart(week,L.DueDate))*2,DATEDIFF(DAY,L.DueDate,GETDATE()) AS OverdueDateIncludeWeek,'
     +'T.Fee*floor(DATEDIFF(DAY,L.DueDate,GETDATE())) AS Penati, P.Code As PatronCode, P.Code,I.code as ItemCode,I.ID,HLC.LibId FROM CIR_LOAN L,CIR_PATRON P,ITEM I,Field200s F , CIR_LOAN_TYPE T,HOLDING_LOCATION  HLC WHERE L.PatronID= P.ID AND L.ItemID=I.ID AND I.ID=F.ItemID AND L.LocationID=HLC.ID AND F.FieldCode=245 AND L.LoanTypeID=T.ID'
 	IF @libIDs='' 
@@ -6997,3 +6997,340 @@ CREATE PROCEDURE [dbo].[FPT_SELECTALLDELETEABLE]
 
 AS
 	select ID from ITEM where ID not in (select distinct ItemID from HOLDING);
+
+
+-- =============================================
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_SPECIALIZED_REPORT]    Script Date: 09/16/2019 14:24:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	BÁO CÁO KIỂM SOÁT
+-- =============================================
+CREATE PROCEDURE [dbo].[FPT_SPECIALIZED_REPORT]
+	@intLibID int,
+	@strSubCode varchar(5000),
+	@intUserID int
+AS
+BEGIN 
+	IF @intLibID = 81
+	BEGIN
+		SELECT S.ItemID, S.Content AS SUBJECTCODE, F2.Content AS ITEMNAME, I.Code AS ITEMCODE, '' AS ISBN, F1.Content AS AUTHOR, '' AS PUBLISHER, H.Total AS TOTAL
+		FROM (SELECT DISTINCT ItemID, Content FROM FIELD600S WHERE FieldCode like '650' and @strSubCode like '%;'+cast(Content AS VARCHAR(20))+';%') S,
+			ITEM I, FIELD200S F2, FIELD100S F1, 
+			(SELECT count(Holding.ItemID) AS Total, Holding.ItemID FROM Holding, Item WHERE Holding.ItemID = Item.ID 
+			and Holding.LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										UNION SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 
+			GROUP BY Holding.ItemID) H
+		WHERE S.ItemID = I.ID and S.ItemID = F2.ItemID and S.ItemID = F1.ItemID and S.ItemID = H.ItemID
+			and F2.FieldCode = '245' and F1.FieldCode = '100'
+		ORDER BY S.Content ASC
+	END
+	ELSE IF @intLibID = 20
+	BEGIN
+		SELECT S.ItemID, S.Content AS SUBJECTCODE, F2.Content AS ITEMNAME, I.Code AS ITEMCODE, '' AS ISBN, F1.Content AS AUTHOR, '' AS PUBLISHER, H.Total AS TOTAL
+		FROM (SELECT DISTINCT ItemID, Content FROM FIELD600S WHERE FieldCode like '650' and @strSubCode like '%;'+cast(Content AS VARCHAR(20))+';%') S,
+			ITEM I, FIELD200S F2, FIELD100S F1, 
+			(SELECT count(Holding.ItemID) AS Total, Holding.ItemID FROM Holding, Item WHERE Holding.ItemID = Item.ID 
+			and Holding.LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										EXCEPT SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 
+			GROUP BY Holding.ItemID) H
+		WHERE S.ItemID = I.ID and S.ItemID = F2.ItemID and S.ItemID = F1.ItemID and S.ItemID = H.ItemID
+			and F2.FieldCode = '245' and F1.FieldCode = '100'
+		ORDER BY S.Content ASC
+	END
+	ELSE
+	BEGIN
+		SELECT S.ItemID, S.Content AS SUBJECTCODE, F2.Content AS ITEMNAME, I.Code AS ITEMCODE, '' AS ISBN, F1.Content AS AUTHOR, '' AS PUBLISHER, H.Total AS TOTAL
+		FROM (SELECT DISTINCT ItemID, Content FROM FIELD600S WHERE FieldCode like '650' and @strSubCode like '%;'+cast(Content AS VARCHAR(20))+';%') S,
+			ITEM I, FIELD200S F2, FIELD100S F1, 
+			(SELECT count(Holding.ItemID) AS Total, Holding.ItemID FROM Holding, Item WHERE Holding.ItemID = Item.ID 
+			and Holding.LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID) 
+			GROUP BY Holding.ItemID) H
+		WHERE S.ItemID = I.ID and S.ItemID = F2.ItemID and S.ItemID = F1.ItemID and S.ItemID = H.ItemID
+			and F2.FieldCode = '245' and F1.FieldCode = '100'
+		ORDER BY S.Content ASC
+	END	
+END
+
+-- =================================
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_SPECIALIZED_REPORT_GET_PUBLISHER]    Script Date: 09/16/2019 14:26:01 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	BÁO CÁO KIỂM SOÁT - GET PUBLISHER
+-- =============================================
+CREATE PROCEDURE [dbo].[FPT_SPECIALIZED_REPORT_GET_PUBLISHER]
+	@intItemID int
+AS
+BEGIN
+	SELECT R.ItemID as ItemID, C.DisplayEntry as PUBLISHER 
+	FROM ITEM_PUBLISHER R, CAT_DIC_PUBLISHER C 
+	WHERE R.PublisherID = C.ID and R.ItemID = @intItemID
+END
+
+-- ===================================
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_SPECIALIZED_REPORT_TOTAL]    Script Date: 09/16/2019 14:26:32 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	BÁO CÁO KIỂM SOÁT
+-- =============================================
+CREATE PROCEDURE [dbo].[FPT_SPECIALIZED_REPORT_TOTAL]
+	@intLibID int,
+	@strItemIDs varchar(5000),
+	@intType int,
+	@intUserID int
+AS
+BEGIN 
+	IF @intType = 1 -- GT
+	BEGIN
+		IF @intLibID = 81
+		BEGIN
+			SELECT COUNT(*) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' 
+			AND LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										UNION SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 	
+			AND HOLDING.COPYNUMBER LIKE '%GT%'
+		END
+		ELSE IF @intLibID = 20
+		BEGIN
+			SELECT COUNT(*) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' 
+			AND LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										EXCEPT SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 	
+			AND HOLDING.COPYNUMBER LIKE '%GT%'
+		END
+		ELSE
+		BEGIN
+			SELECT COUNT(*) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' AND LIBID = @intLibID		
+			AND HOLDING.COPYNUMBER LIKE '%GT%'
+		END
+	END
+	ELSE -- TK
+	BEGIN
+		IF @intLibID = 81
+		BEGIN		
+			SELECT COUNT(*) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' 
+			AND LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										UNION SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 	
+			AND HOLDING.COPYNUMBER LIKE '%TK%'
+		END
+		ELSE IF @intLibID = 20
+		BEGIN
+			SELECT COUNT(*) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' 
+			AND LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										EXCEPT SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 	
+			AND HOLDING.COPYNUMBER LIKE '%TK%'
+		END
+		ELSE
+		BEGIN
+			SELECT COUNT(*) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' AND LIBID = @intLibID		
+			AND HOLDING.COPYNUMBER LIKE '%TK%'
+		END
+	END
+END
+
+-- ===================================
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_SPECIALIZED_REPORT_TOTAL_ITEM]    Script Date: 09/16/2019 14:26:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	BÁO CÁO KIỂM SOÁT
+-- =============================================
+CREATE PROCEDURE [dbo].[FPT_SPECIALIZED_REPORT_TOTAL_ITEM]
+	@intLibID int,
+	@strItemIDs varchar(5000),
+	@intType int,
+	@intUserID int
+AS
+BEGIN 
+	IF @intType = 1 -- GT
+	BEGIN
+		IF @intLibID = 81
+		BEGIN
+			SELECT COUNT(DISTINCT ITEMID) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' 
+			AND LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										UNION SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 	
+			AND HOLDING.COPYNUMBER LIKE '%GT%'
+		END
+		ELSE IF @intLibID = 20
+		BEGIN
+			SELECT COUNT(DISTINCT ITEMID) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' 
+			AND LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										EXCEPT SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 	
+			AND HOLDING.COPYNUMBER LIKE '%GT%'
+		END
+		ELSE
+		BEGIN
+			SELECT COUNT(DISTINCT ITEMID) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' AND LIBID = @intLibID		
+			AND HOLDING.COPYNUMBER LIKE '%GT%'
+		END
+	END
+	ELSE -- TK
+	BEGIN
+		IF @intLibID = 81
+		BEGIN		
+			SELECT COUNT(DISTINCT ITEMID) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' 
+			AND LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										UNION SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 	
+			AND HOLDING.COPYNUMBER LIKE '%TK%'
+			AND ITEMID NOT IN (SELECT DISTINCT ITEMID FROM HOLDING WHERE COPYNUMBER LIKE '%GT%'
+								INTERSECT
+								SELECT DISTINCT ITEMID FROM HOLDING WHERE COPYNUMBER LIKE '%TK%')
+		END
+		ELSE IF @intLibID = 20
+		BEGIN
+			SELECT COUNT(DISTINCT ITEMID) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' 
+			AND LocationID in (SELECT B.ID FROM HOLDING_LIBRARY A, HOLDING_LOCATION B, SYS_USER_LOCATION C 
+										WHERE A.LocalLib = 1 AND A.ID = B.LibID AND B.ID = C.LocID AND C.UserID = @intUserID AND B.LibID = @intLibID
+										EXCEPT SELECT ID FROM HOLDING_LOCATION	WHERE ID in (13,15,16,27)) 	
+			AND HOLDING.COPYNUMBER LIKE '%TK%'
+			AND ITEMID NOT IN (SELECT DISTINCT ITEMID FROM HOLDING WHERE COPYNUMBER LIKE '%GT%'
+								INTERSECT
+								SELECT DISTINCT ITEMID FROM HOLDING WHERE COPYNUMBER LIKE '%TK%')
+		END
+		ELSE
+		BEGIN
+			SELECT COUNT(DISTINCT ITEMID) AS TOTAL 
+			FROM HOLDING 
+			WHERE @strItemIDs like '%;'+cast(ITEMID as varchar(20))+';%' AND LIBID = @intLibID		
+			AND HOLDING.COPYNUMBER LIKE '%TK%'
+			AND ITEMID NOT IN (SELECT DISTINCT ITEMID FROM HOLDING WHERE COPYNUMBER LIKE '%GT%'
+								INTERSECT
+								SELECT DISTINCT ITEMID FROM HOLDING WHERE COPYNUMBER LIKE '%TK%')
+		END
+	END
+END
+
+
+
+--***********************************DOANHDQ 18/09/19****************************************
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_CATA_GETCONTENT_BY_INDEX]    Script Date: 9/18/2019 3:29:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,DOANHDQ>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[FPT_CATA_GETCONTENT_BY_INDEX]
+@Index  int
+AS
+BEGIN
+
+	SELECT TOP(@Index) ID FROM ITEM EXCEPT SELECT TOP(@Index -1) ID FROM ITEM
+
+END
+
+
+
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_SP_ACQ_NEW_INVENTORY]    Script Date: 09/22/2019 20:43:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+Create PROCEDURE [dbo].[FPT_SP_ACQ_NEW_INVENTORY]
+(
+-- Purpose: New inventory
+-- History modify
+-- Person     Date      Comment    
+-- DUCNV     150919    Create
+---------------  ------    ---------------------------------------------------    
+	@strInventoryName	NVARCHAR(200),
+	@strInventoryDate	VARCHAR(30),    
+	@strInputer 		NVARCHAR(100)
+)
+AS    
+	  -- Declare variables
+	DECLARE @intNextID INT
+
+		BEGIN
+			-- Get NextID    
+			SELECT @intNextID = ISNULL(MAX(ID), 0) + 1 FROM INVENTORY    
+			-- Execute
+			INSERT INTO INVENTORY (ID, Name, OpenedDate, DoneBy, Status) VALUES (@intNextID, @strInventoryName, @strInventoryDate, @strInputer, 0)
+		END
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[FPT_SP_ACQ_GETMAXID_HINT]    Script Date: 09/22/2019 20:43:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+ALTER PROCEDURE [dbo].[FPT_SP_ACQ_GETMAXID_HINT]  
+-- Purpose: Get max inventorytime   
+-- MODIFICATION HISTORY  
+-- Person      Date    Comments  
+-- ducnv      180919  Create  
+-- ---------   ------  -------------------------------------------   
+AS  
+   SELECT ISNULL(MAX(InventoryTime),0)  FROM HOLDING_INVENTORY   
+

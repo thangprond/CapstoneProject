@@ -23231,5 +23231,104 @@ namespace Libol.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("FPT_SELECTALLDELETEABLE");
         }
+    
+        public virtual ObjectResult<FPT_SPECIALIZED_REPORT_Result> FPT_SPECIALIZED_REPORT(Nullable<int> intLibID, string strSubCode, Nullable<int> intUserID)
+        {
+            var intLibIDParameter = intLibID.HasValue ?
+                new ObjectParameter("intLibID", intLibID) :
+                new ObjectParameter("intLibID", typeof(int));
+    
+            var strSubCodeParameter = strSubCode != null ?
+                new ObjectParameter("strSubCode", strSubCode) :
+                new ObjectParameter("strSubCode", typeof(string));
+    
+            var intUserIDParameter = intUserID.HasValue ?
+                new ObjectParameter("intUserID", intUserID) :
+                new ObjectParameter("intUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FPT_SPECIALIZED_REPORT_Result>("FPT_SPECIALIZED_REPORT", intLibIDParameter, strSubCodeParameter, intUserIDParameter);
+        }
+    
+        public virtual ObjectResult<FPT_SPECIALIZED_REPORT_GET_PUBLISHER_Result> FPT_SPECIALIZED_REPORT_GET_PUBLISHER(Nullable<int> intItemID)
+        {
+            var intItemIDParameter = intItemID.HasValue ?
+                new ObjectParameter("intItemID", intItemID) :
+                new ObjectParameter("intItemID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FPT_SPECIALIZED_REPORT_GET_PUBLISHER_Result>("FPT_SPECIALIZED_REPORT_GET_PUBLISHER", intItemIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> FPT_SPECIALIZED_REPORT_TOTAL(Nullable<int> intLibID, string strItemIDs, Nullable<int> intType, Nullable<int> intUserID)
+        {
+            var intLibIDParameter = intLibID.HasValue ?
+                new ObjectParameter("intLibID", intLibID) :
+                new ObjectParameter("intLibID", typeof(int));
+    
+            var strItemIDsParameter = strItemIDs != null ?
+                new ObjectParameter("strItemIDs", strItemIDs) :
+                new ObjectParameter("strItemIDs", typeof(string));
+    
+            var intTypeParameter = intType.HasValue ?
+                new ObjectParameter("intType", intType) :
+                new ObjectParameter("intType", typeof(int));
+    
+            var intUserIDParameter = intUserID.HasValue ?
+                new ObjectParameter("intUserID", intUserID) :
+                new ObjectParameter("intUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("FPT_SPECIALIZED_REPORT_TOTAL", intLibIDParameter, strItemIDsParameter, intTypeParameter, intUserIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> FPT_SPECIALIZED_REPORT_TOTAL_ITEM(Nullable<int> intLibID, string strItemIDs, Nullable<int> intType, Nullable<int> intUserID)
+        {
+            var intLibIDParameter = intLibID.HasValue ?
+                new ObjectParameter("intLibID", intLibID) :
+                new ObjectParameter("intLibID", typeof(int));
+    
+            var strItemIDsParameter = strItemIDs != null ?
+                new ObjectParameter("strItemIDs", strItemIDs) :
+                new ObjectParameter("strItemIDs", typeof(string));
+    
+            var intTypeParameter = intType.HasValue ?
+                new ObjectParameter("intType", intType) :
+                new ObjectParameter("intType", typeof(int));
+    
+            var intUserIDParameter = intUserID.HasValue ?
+                new ObjectParameter("intUserID", intUserID) :
+                new ObjectParameter("intUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("FPT_SPECIALIZED_REPORT_TOTAL_ITEM", intLibIDParameter, strItemIDsParameter, intTypeParameter, intUserIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> FPT_CATA_GETCONTENT_BY_INDEX(Nullable<int> index)
+        {
+            var indexParameter = index.HasValue ?
+                new ObjectParameter("Index", index) :
+                new ObjectParameter("Index", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("FPT_CATA_GETCONTENT_BY_INDEX", indexParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> FPT_SP_ACQ_GETMAXID_HINT()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("FPT_SP_ACQ_GETMAXID_HINT");
+        }
+    
+        public virtual int FPT_SP_ACQ_NEW_INVENTORY(string strInventoryName, string strInventoryDate, string strInputer)
+        {
+            var strInventoryNameParameter = strInventoryName != null ?
+                new ObjectParameter("strInventoryName", strInventoryName) :
+                new ObjectParameter("strInventoryName", typeof(string));
+    
+            var strInventoryDateParameter = strInventoryDate != null ?
+                new ObjectParameter("strInventoryDate", strInventoryDate) :
+                new ObjectParameter("strInventoryDate", typeof(string));
+    
+            var strInputerParameter = strInputer != null ?
+                new ObjectParameter("strInputer", strInputer) :
+                new ObjectParameter("strInputer", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FPT_SP_ACQ_NEW_INVENTORY", strInventoryNameParameter, strInventoryDateParameter, strInputerParameter);
+        }
     }
 }
