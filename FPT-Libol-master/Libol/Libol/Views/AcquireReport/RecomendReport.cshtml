@@ -39,7 +39,7 @@
             <div class="col-6">
                 <div class="form-group row col-12">
                     <label class="control-label col-md-8 align-self-center">Mã số đề nghị</label>
-                    <input type="text" name="recomCode" id="reCode" class="form-control col-md-4" />
+                    <input type="text" onkeypress="checkValid()" name="recomCode" id="reCode" class="form-control col-md-4" disabled/>
                 </div>
             </div>
         </div>
@@ -47,13 +47,13 @@
             <div class="col-6">
                 <div class="form-group row col-12">
                     <label class="control-label col-md-8 align-self-center">Từ thời gian bổ sung</label>
-                    <input class="form-control col-md-4" type="date" id="FromDate" name="StartDate" />
+                    <input class="form-control col-md-4" type="date" onkeypress="checkValid()" id="FromDate" name="StartDate" disabled/>
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group row col-12">
                     <label class="control-label col-md-3 align-self-center">Tới thời gian bổ sung</label>
-                    <input class="form-control col-md-4" type="date" id="ToDate" name="EndDate" />
+                    <input class="form-control col-md-4" onkeypress="checkValid()" type="date" id="ToDate" name="EndDate" disabled/>
                 </div>
             </div>
         </div>
@@ -82,6 +82,12 @@
                             $("#Location").append('<option value="' + loc.Value + '">' +
                                 loc.Text + '</option>');
                         });
+                        if (document.getElementById("Library").value == "") {
+                            $("input").prop('disabled', true);
+                        } else {
+                            $("input").prop('disabled', false);
+                        }
+                        
                     }
                 });
                 return false;
@@ -96,7 +102,6 @@
         function checkValid() {
             if (document.getElementById("Library").value == "") {
                 alert("Hãy chọn thư viện");
-
             } else if (document.getElementById("FromDate").value != "" && document.getElementById("ToDate").value != "" && document.getElementById("FromDate").value > document.getElementById("ToDate").value) {
                 alert("Khoảng thời gian thống kê không hợp lệ");
             }   else {
