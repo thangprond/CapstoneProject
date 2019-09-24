@@ -100,8 +100,17 @@ namespace Libol.Controllers
                     sessionpcode = patroncode;
                 }
                 Getpatrondetail(patroncode);
-            }
+				if (db.CIR_PATRON_LOCK.Where(a => a.PatronCode == patroncode).Count() == 0)
+				{
+					ViewBag.active = 1;
+				}
+				else
+				{
+					ViewBag.active = 0;
+				}
+			}
 			
+
 			return PartialView("_checkinByDKCB");
         }
 
@@ -124,7 +133,16 @@ namespace Libol.Controllers
                 new ObjectParameter("intError", typeof(int)));
             }
             Getpatrondetail(sessionpcode);
-            if (success == -1)
+			//FPT_SP_UNLOCK_PATRON_CARD_LIST("'" + strPatronCode + "'");
+			if (db.CIR_PATRON_LOCK.Where(a => a.PatronCode == strPatronCode).Count() == 0)
+			{
+				ViewBag.active = 1;
+			}
+			else
+			{
+				ViewBag.active = 0;
+			}
+			if (success == -1)
             {
                 ViewBag.message = "Ghi trả thất bại";
                 ViewBag.CurrentCheckin = null;
