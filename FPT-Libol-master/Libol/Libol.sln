@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libol", "Libol\Libol.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlibUnitTest", "FlibUnitTest\FlibUnitTest.csproj", "{9F778558-5CE8-47DF-8894-24900FA6589F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPAC", "OPAC\OPAC.csproj", "{CB9009D3-804E-4B37-AE62-CF961038618A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9F778558-5CE8-47DF-8894-24900FA6589F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F778558-5CE8-47DF-8894-24900FA6589F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F778558-5CE8-47DF-8894-24900FA6589F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB9009D3-804E-4B37-AE62-CF961038618A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB9009D3-804E-4B37-AE62-CF961038618A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB9009D3-804E-4B37-AE62-CF961038618A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB9009D3-804E-4B37-AE62-CF961038618A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
