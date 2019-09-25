@@ -149,9 +149,20 @@ namespace Libol.Controllers
             }
             else
             {
-                ViewBag.message = "";
-                ViewBag.CurrentCheckin = null;
-            }
+               
+				int lastid = db.CIR_LOAN_HISTORY.Max(a => a.ID);
+				int id = db.CIR_LOAN_HISTORY.Where(b => b.ID == lastid).First().ItemID;
+				String fieldcode = "245";
+				ViewBag.message = "";
+				ViewBag.CurrentCheckin = new CurrentCheckIn
+				{
+					Title = f.OnFormatHoldingTitle(db.FIELD200S.Where(a => a.ItemID == id).Where(a => a.FieldCode == fieldcode).First().Content),
+					Copynumber = db.CIR_LOAN_HISTORY.Where(a => a.ID == lastid).First().CopyNumber,
+					CheckOutDate = db.CIR_LOAN_HISTORY.Where(a => a.ID == lastid).First().CheckOutdate.ToString("dd/MM/yyyy"),
+					CheckInDate = db.CIR_LOAN_HISTORY.Where(a => a.ID == lastid).First().CheckInDate.ToString("dd/MM/yyyy"),
+					OverdueFine = db.CIR_LOAN_HISTORY.Where(a => a.ID == lastid).First().OverdueFine.ToString()
+				};
+			}
             return PartialView("_checkinByDKCB");
         }
 
