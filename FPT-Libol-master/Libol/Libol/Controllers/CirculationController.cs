@@ -318,9 +318,12 @@ namespace Libol.Controllers
                     RenewDate = i.RenewDate.Value.ToString("dd/MM/yyyy"),
                     OverDueDateNew = i.OverDueDateNew.Value.ToString("dd/MM/yyyy"),
                     OverDueDateOld = i.OverDueDateOld.Value.ToString("dd/MM/yyyy"),
-                    CheckInDate = "",
+                    //CheckInDate = "",
+					OverDueDate = (i.RenewDate.Value - i.OverDueDateOld.Value).Days > 0 ? (i.RenewDate.Value - i.OverDueDateOld.Value).Days.ToString() : "",
                     Price = i.Price.ToString() + " " + i.Currency,
-                    Currency = i.Currency
+					FeeOverDueDate=(i.RenewDate.Value - i.OverDueDateOld.Value).Days > 0 ? ((i.RenewDate.Value - i.OverDueDateOld.Value).Days * 5).ToString()+"000 "+i.Currency:"",
+
+					Currency = i.Currency
                 });
             }
 
@@ -690,8 +693,9 @@ namespace Libol.Controllers
                     OverdueDays = i.OverdueDays,
                     OverdueFine = i.OverdueFine.ToString("#.##"),
                     Price = i.Price.ToString() + " " + i.Currency,
-                    Currency = i.Currency
-                });
+                    Currency = i.Currency,
+					//OverDueDate=i.OverdueFine-i.OverDueDateNew
+				});
             }
             return Json(new
             {
@@ -1259,7 +1263,8 @@ namespace Libol.Controllers
         public string OverdueFine { get; set; }
         public string Price { get; set; }
         public string Currency { get; set; }
-    }
+		public string OverDueDate { get; set; }
+	}
 
     public class GET_PATRON_ONLOANINFOR_Result_2
     {
@@ -1286,6 +1291,8 @@ namespace Libol.Controllers
         public string OverDueDateOld { get; set; }
         public string CheckInDate { get; set; }
         public string Price { get; set; }
-        public string Currency { get; set; }
+		public string OverDueDate { get; set; }
+		public string FeeOverDueDate { get; set; }
+		public string Currency { get; set; }
     }
 }

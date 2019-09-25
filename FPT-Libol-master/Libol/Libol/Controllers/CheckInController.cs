@@ -100,8 +100,17 @@ namespace Libol.Controllers
                     sessionpcode = patroncode;
                 }
                 Getpatrondetail(patroncode);
-            }
+				if (db.CIR_PATRON_LOCK.Where(a => a.PatronCode == patroncode).Count() == 0)
+				{
+					ViewBag.active = 1;
+				}
+				else
+				{
+					ViewBag.active = 0;
+				}
+			}
 			
+
 			return PartialView("_checkinByDKCB");
         }
 
@@ -124,16 +133,36 @@ namespace Libol.Controllers
                 new ObjectParameter("intError", typeof(int)));
             }
             Getpatrondetail(sessionpcode);
-            if (success == -1)
+			//FPT_SP_UNLOCK_PATRON_CARD_LIST("'" + strPatronCode + "'");
+			if (db.CIR_PATRON_LOCK.Where(a => a.PatronCode == strPatronCode).Count() == 0)
+			{
+				ViewBag.active = 1;
+			}
+			else
+			{
+				ViewBag.active = 0;
+			}
+			if (success == -1)
             {
                 ViewBag.message = "Ghi trả thất bại";
                 ViewBag.CurrentCheckin = null;
             }
             else
             {
-                ViewBag.message = "";
-                ViewBag.CurrentCheckin = null;
-            }
+               
+				int lastid = db.CIR_LOAN_HISTORY.Max(a => a.ID);
+				int id = db.CIR_LOAN_HISTORY.Where(b => b.ID == lastid).First().ItemID;
+				String fieldcode = "245";
+				ViewBag.message = "";
+				ViewBag.CurrentCheckin = new CurrentCheckIn
+				{
+					Title = f.OnFormatHoldingTitle(db.FIELD200S.Where(a => a.ItemID == id).Where(a => a.FieldCode == fieldcode).First().Content),
+					Copynumber = db.CIR_LOAN_HISTORY.Where(a => a.ID == lastid).First().CopyNumber,
+					CheckOutDate = db.CIR_LOAN_HISTORY.Where(a => a.ID == lastid).First().CheckOutdate.ToString("dd/MM/yyyy"),
+					CheckInDate = db.CIR_LOAN_HISTORY.Where(a => a.ID == lastid).First().CheckInDate.ToString("dd/MM/yyyy"),
+					OverdueFine = db.CIR_LOAN_HISTORY.Where(a => a.ID == lastid).First().OverdueFine.ToString()
+				};
+			}
             return PartialView("_checkinByDKCB");
         }
 

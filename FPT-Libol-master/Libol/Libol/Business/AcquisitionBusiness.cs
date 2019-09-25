@@ -93,5 +93,12 @@ namespace Libol.Models
                 new object[] { strLocID, strShelf, intStatus }).ToList();
             return list;
         }
+        //recomend report
+        public List<FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest_Result> FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest(int LibraryID, int LocationID, string ReCode, string StartDate, string EndDate)
+        {
+            List<FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest_Result> list = db.Database.SqlQuery<FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest_Result>("FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest {0}, {1}, {2}, {3}, {4}",
+                new object[] { LibraryID, LocationID, ReCode, StartDate, EndDate }).ToList();
+            return list;
+        }
     }
 }
