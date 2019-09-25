@@ -1793,28 +1793,18 @@ namespace Libol.Controllers
         {
             String StartD = StartDate.ToString();
             String EndD = EndDate.ToString();
-            int LibID = 0;
-            if(Library >= 0)
-            {
-                LibID = Library;
-            }
-            int LocID = 0;
-            if (Location >= 0)
-            {
-                LocID = Location;
-            }
+            int LibID = Library;
+            int LocID = Location;
             String sdd = "", edd = "";
             string recomCode = "";
             sdd = Request.Form["StartDate"].ToString();
             edd = Request.Form["EndDate"].ToString();
-            if (String.IsNullOrEmpty(Request.Form["recomCode"].ToString()))
+            recomCode = Request.Form["recomCode"].ToString();
+            recomCode = recomCode.Trim();
+            recomCode = recomCode.Replace(" ", "");
+            if (String.IsNullOrEmpty(recomCode))
             {
                 recomCode = null;
-            }
-            else
-            {
-                recomCode = Request.Form["recomCode"].ToString();
-                recomCode = recomCode.Replace(" ", "");
             }
 
             if (sdd == "")
@@ -1830,7 +1820,7 @@ namespace Libol.Controllers
             List<Temper> listPO = new List<Temper>();
 
             List<FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest_Result> listRecommend = new List<FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest_Result>();
-            foreach (var item in ab.FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest(LibID, LocID, recomCode, sdd, edd).ToList())
+            foreach (var item in le.FPT_SP_GET_HOLDING_BY_RECOMMENDID_Newest(LibID, LocID, recomCode, sdd, edd).ToList())
             {
 
                 int uCount = 0;
