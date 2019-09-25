@@ -113,14 +113,14 @@
                     <th style="width:33%;">Số tên sách</th>
                     <th style="width:33%;">Số bản sách</th>
                     <th></th>
-                    <th></th>
+                    <th></th> 
                     <th></th>
                     <th></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                @*<tr>
                     <td>Tổng Giáo trình</td>
                     <td>@ViewBag.GTItem</td>
                     <td>@ViewBag.GT</td>
@@ -139,7 +139,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td>Tổng</td>
                     <td>@ViewBag.TTItem</td>
@@ -162,24 +162,30 @@
                     <th>Tên sách</th>
                     <th>Mã tài liệu</th>
                     <th>ISBN</th>
+                    <th>Lần xuất bản</th>
+                    <th>Năm xuất bản</th>
                     <th>Tác giả</th>
                     <th>Nhà xuất bản</th>
-                    <th>Số lượng</th>
+                    <th>Số lượng sách tham khảo</th>
+                    <th>Số lượng sách giáo trình</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var i in ViewBag.Result)
                 {
-                    <tr>
-                        <td style="text-align:center;"></td>
-                        <td>@i.SUBJECTCODE</td>
-                        <td>@i.ITEMNAME</td>
-                        <td>@i.ITEMCODE</td>
-                        <td>@i.ISBN.ToString()</td>
-                        <td>@i.AUTHOR</td>
-                        <td>@i.PUBLISHER</td>
-                        <td>@i.TOTAL</td>
-                    </tr>
+                <tr>
+                    <td style="text-align:center;"></td>
+                    <td>@i.SUBJECTCODE</td>
+                    <td>@i.ITEMNAME</td>
+                    <td>@i.ITEMCODE</td>
+                    <td>@i.ISBN.ToString()</td>
+                    <td></td>
+                    <td></td>
+                    <td>@i.AUTHOR</td>
+                    <td>@i.PUBLISHER</td>
+                    <td></td>
+                    <td>@i.TOTAL</td>
+                </tr>
                 }
             </tbody>
         </table>
