@@ -117,12 +117,7 @@
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên sách</th>
-                            <th>Mã tài liệu</th>
                             <th>DKCB</th>
-                            <th>Callnumber</th>
-                            <th>Giá tiền</th>
-                            <th>Ghi chú</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,12 +129,7 @@
 
                             <tr>
                                 <td>@(STT)</td>
-                                <td>@item.Content</td>
-                                <td>@item.Code</td>
-                                <td>@item.CopyNumber</td>
-                                <td>@item.CallNumber</td>
-                                <td>@item.Price</td>
-                                <td>@item.Note</td>
+                                <td>@item</td>
                             </tr>
                             STT++;
                         }

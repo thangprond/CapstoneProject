@@ -100,5 +100,12 @@ namespace Libol.Models
                 new object[] { LibraryID, LocationID, ReCode, StartDate, EndDate }).ToList();
             return list;
         }
+        
+        public List<FPT_SP_INVENTORY_Result> FPT_SP_INVENTORY(int LibraryID)
+        {
+            List<FPT_SP_INVENTORY_Result> list = db.Database.SqlQuery<FPT_SP_INVENTORY_Result>("FPT_SP_INVENTORY {0}", new object[] { LibraryID }).ToList();
+            return list;
+
+        }
     }
 }
