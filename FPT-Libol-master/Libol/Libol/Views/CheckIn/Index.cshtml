@@ -332,11 +332,12 @@
             intType: 1,
             intAutoPaid: 0,
             strCopyNumbers: document.getElementById("strCopyNumber").value,
-            strCheckInDate: document.getElementById("strCheckinDate").value
+            strCheckInDate: document.getElementById("strCheckinDate").value,
+            strPatronCode: document.getElementById("strPatronCode").value
         };
         $.ajax({
             url: "CheckIn/CheckInByDKCB",
-            data: JSON.stringify(empObj),
+            data: JSON.stringify(empObj), 
             contentType: "application/json;charset=utf-8",
             type: "POST",
             success: function (result) {
