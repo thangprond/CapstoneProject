@@ -37,6 +37,7 @@ namespace OPAC.Models
             this.FIELD700S = new HashSet<FIELD700S>();
             this.FIELD800S = new HashSet<FIELD800S>();
             this.FIELD900S = new HashSet<FIELD900S>();
+            this.FPT_CATA_FILE_NEW = new HashSet<FPT_CATA_FILE_NEW>();
             this.HOLDINGs = new HashSet<HOLDING>();
             this.HOLDING_INVENTORY = new HashSet<HOLDING_INVENTORY>();
             this.ILL_INCOMING_REQUESTS = new HashSet<ILL_INCOMING_REQUESTS>();
@@ -62,6 +63,7 @@ namespace OPAC.Models
             this.ITEM_FULLTEXT = new HashSet<ITEM_FULLTEXT>();
             this.SER_ISSUE = new HashSet<SER_ISSUE>();
             this.ACQ_PO = new HashSet<ACQ_PO>();
+            this.FPT_RECOMMEND = new HashSet<FPT_RECOMMEND>();
         }
     
         public int ID { get; set; }
@@ -127,6 +129,8 @@ namespace OPAC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FIELD900S> FIELD900S { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FPT_CATA_FILE_NEW> FPT_CATA_FILE_NEW { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HOLDING> HOLDINGs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HOLDING_INVENTORY> HOLDING_INVENTORY { get; set; }
@@ -179,5 +183,7 @@ namespace OPAC.Models
         public virtual MARC_WORKSHEET MARC_WORKSHEET { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ACQ_PO> ACQ_PO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FPT_RECOMMEND> FPT_RECOMMEND { get; set; }
     }
 }
