@@ -189,7 +189,15 @@ namespace Libol.Models
             currentHolding.CallNumber = holding.CallNumber;
            // currentHolding.Availlable = holding.Availlable;
           //  currentHolding.AcquiredSourceID = holding.AcquiredSourceID;
-            currentHolding.AcquiredDate = DateTime.ParseExact(holding.AcquiredDate, "yyyy-MM-dd", null);
+          if(holding.AcquiredDate != null)
+            {
+                currentHolding.AcquiredDate = DateTime.ParseExact(holding.AcquiredDate, "yyyy-MM-dd", null);
+            }
+            
+            if(holding.ReceiptedDate!= null)
+            {
+                currentHolding.ReceiptedDate = DateTime.ParseExact(holding.ReceiptedDate, "yyyy-MM-dd", null);
+            }           
             //   currentHolding.Acquired = holding.Acquired;
             try
             {

@@ -481,9 +481,9 @@
                 { "data": "CopyNumber", "name": "CopyNumber" },
                 { "data": "Price", "name": "Price" },
                 { "data": "Currency", "name": "Currency" },
-                { "data": "RecordNumber", "name": "RecordNumber" },
-                { "data": "ReceiptedDate", "name": "ReceiptedDate" },
+                { "data": "RecordNumber", "name": "RecordNumber" },               
                 { "data": "AcquiredDate", "name": "AcquiredDate" },
+                { "data": "ReceiptedDate", "name": "ReceiptedDate" },
                 { "data": "AcquiredSource", "name": "AcquiredSource" },
                 { "data": "Note", "name": "Note" },
                 { "data": "Status", "name": "Status", "orderable": "false" },
@@ -660,6 +660,10 @@
         RecordNumber_Update = RecordNumber;
         Price_Update = Price;
         Currency_Update = Currency;
+
+        var receipted = ReceiptedDate.split("/");
+        var receiptedDate = receipted[2] + "-" + receipted[1] + "-" + receipted[0];
+
         ReceiptedDate_Update = ReceiptedDate;
 
         var from = AcquiredDate.split("/");
@@ -693,6 +697,7 @@
         document.getElementById("txtCallNumber2").value = CallNumber;
         document.getElementById("txtRecordNumber2").value = RecordNumber;
         document.getElementById("txtAcquiredDate2").value = acquiredDate;
+        document.getElementById("txtReceiptedDate2").value = receiptedDate;
         document.getElementById("txtNote2").value = Note;
 
         var currency = Currency.replace(/\s/g, '');
@@ -717,6 +722,7 @@
         Price_Update = document.getElementById("txtPrice2").value;
        // ReceiptedDate_Update = ReceiptedDate;
         AcquiredDate_Update = document.getElementById("txtAcquiredDate2").value;
+        ReceiptedDate_Update = document.getElementById("txtReceiptedDate2").value;
       //  AcquiredSource_Update = AcquiredSource;
         Note_Update = document.getElementById("txtNote2").value;
 
@@ -918,6 +924,10 @@
                 <tr>
                     <td style="width: 38%;text-align: right"><label for="txtAcquiredDate2">Ngày chứng từ:</label></td>
                     <td style=""><input type="date" class="form-control" id="txtAcquiredDate2"></td>
+                </tr>
+                <tr>
+                    <td style="width: 38%;text-align: right"><label for="txtReceiptedDate2">Ngày bổ sung:</label></td>
+                    <td style=""><input type="date" class="form-control" id="txtReceiptedDate2"></td>
                 </tr>
                 <tr>
                     <td style="width: 38%;text-align: right"><label for="txtRecordNumber2">Số chứng từ:</label></td>
