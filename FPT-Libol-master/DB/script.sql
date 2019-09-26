@@ -7325,7 +7325,7 @@ GO
 
 
 
-ALTER PROCEDURE [dbo].[FPT_SP_ACQ_GETMAXID_HINT]  
+CREATE PROCEDURE [dbo].[FPT_SP_ACQ_GETMAXID_HINT]  
 -- Purpose: Get max inventorytime   
 -- MODIFICATION HISTORY  
 -- Person      Date    Comments  

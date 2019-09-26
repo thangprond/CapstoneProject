@@ -295,7 +295,7 @@ namespace Libol.Controllers
             totalReLib = countCN + cirCount;
             ViewBag.totalInLibrary = totalInLib.ToString();
             ViewBag.totalReLibrary = totalReLib.ToString();
-            List<FPT_SP_INVENTORY_Result> listData = db.FPT_SP_INVENTORY(libid).ToList();
+            List<FPT_SP_INVENTORY_Result> listData = ab.FPT_SP_INVENTORY(libid);
 
             List<string> listStr = myList.ToList();
 
