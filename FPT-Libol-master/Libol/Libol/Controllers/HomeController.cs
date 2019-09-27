@@ -13,6 +13,7 @@ namespace Libol.Controllers
         [AuthAttribute(ModuleID = 0, RightID = "0")]
         public ActionResult Index()
         {
+            ///test
             return View();
         }
     }
